@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nombres Complexes - 4ème Sciences Expérimentales</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX for crisp mathematical formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .katex-display {
+      margin: 0.75rem 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25rem 0;
+    }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .grid-bg {
+      background-size: 24px 24px;
+      background-image: linear-gradient(to right, rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200">
+          $\mathbb{C}$
+        </div>
+        <div>
+          <span class="font-extrabold text-slate-900 tracking-tight block text-base sm:text-lg leading-tight">Nombres Complexes</span>
+          <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">4ème Sc. Expérimentales • Prof. Grichi Borhen</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-sm font-medium">
+        <button onclick="switchTab('cours')" id="nav-cours" class="nav-btn px-4 py-2 rounded-lg text-indigo-600 bg-white shadow-sm transition">
+          Fiche Complète
+        </button>
+        <button onclick="switchTab('labo')" id="nav-labo" class="nav-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          Plan d'Argand-Gauss
+        </button>
+        <button onclick="switchTab('solveur')" id="nav-solveur" class="nav-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          Résolveur $az^2+bz+c$
+        </button>
+        <button onclick="switchTab('lieux')" id="nav-lieux" class="nav-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          Lieux Géométriques
+        </button>
+        <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          Quiz Bac
+        </button>
+      </nav>
+
+      <!-- Search & Mobile Actions -->
+      <div class="flex items-center gap-2">
+        <button onclick="window.print()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-sm" title="Imprimer ou enregistrer en PDF">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Imprimer
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Bar (Bottom scrollable on mobile) -->
+    <div class="md:hidden flex overflow-x-auto px-3 py-2 gap-1 border-t border-slate-100 bg-slate-50 text-xs scrollbar-none font-medium">
+      <button onclick="switchTab('cours')" id="mob-cours" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold">Fiche de Cours</button>
+      <button onclick="switchTab('labo')" id="mob-labo" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-200">Plan Interactif</button>
+      <button onclick="switchTab('solveur')" id="mob-solveur" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-200">Résolveur 2nd Degré</button>
+      <button onclick="switchTab('lieux')" id="mob-lieux" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-200">Lieux Géo</button>
+      <button onclick="switchTab('quiz')" id="mob-quiz" class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-200">Quiz Bac</button>
+    </div>
+  </header>
+
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none bg-slate-900 text-white text-sm font-medium px-4 py-3 rounded-xl shadow-xl flex items-center gap-2">
+    <span id="toast-msg">Opération réussie</span>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: FICHE DE COURS & RÉVISION (18 sections Pr. Grichi Borhen) -->
+    <!-- ================================================================= -->
+    <section id="tab-cours" class="space-y-6">
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-purple-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-12 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="max-w-3xl relative z-10 space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs font-semibold uppercase tracking-wider">
+            <span>Fiche de Révision Bac • 4ème SC. EXP</span>
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Nombres Complexes & Équations</h1>
+          <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+            Synthèse exhaustive fidèle au document de cours du <strong>Prof. Grichi Borhen</strong> : formes algébrique, trigonométrique et exponentielle, racines carrées et $n$-ièmes, résolutions d'équations dans $\mathbb{C}$, interprétations géométriques et réflexes Bac.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2 text-xs">
+            <span class="bg-white/15 px-2.5 py-1 rounded-md">Formule d'Euler</span>
+            <span class="bg-white/15 px-2.5 py-1 rounded-md">Formule de Moivre</span>
+            <span class="bg-white/15 px-2.5 py-1 rounded-md">Discriminant complexe $\Delta$</span>
+            <span class="bg-white/15 px-2.5 py-1 rounded-md">Lieux géométriques</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Filter / Search Bar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="relative w-full sm:w-96">
+          <input type="text" id="courseSearch" oninput="filterCards()" placeholder="Rechercher une notion (ex: Moivre, racine, argument, conjugué)..."
+            class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-500 w-full sm:w-auto justify-end">
+          <span>Affichage rapide :</span>
+          <button onclick="expandAll(true)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition">Déplier tout</button>
+          <button onclick="expandAll(false)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition">Replier tout</button>
+        </div>
+      </div>
+
+      <div id="course-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <!-- Section 1 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="ensemble nombres complexes imaginaire i carre -1">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">1</span>
+              Ensemble $\mathbb{C}$ des complexes
+            </h3>
+            <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">Définition</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-3">
+            <p>On note $\mathbb{C}$ l'ensemble des nombres complexes. Il contient $\mathbb{R}$ et permet notamment de résoudre des équations polynomiales sans solutions réelles.</p>
+            <div class="p-3 bg-indigo-50/70 border border-indigo-100 rounded-xl text-center font-medium text-indigo-900">
+              On définit le nombre imaginaire $i$ par :
+              $$i^2 = -1$$
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="forme algebrique partie reelle imaginaire re im z">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">2</span>
+              Forme algébrique
+            </h3>
+            <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium">Fondamental</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-3">
+            <p>Tout nombre complexe $z$ s'écrit de manière <strong>unique</strong> sous la forme :</p>
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center">
+              $$z = a + ib \quad (a, b \in \mathbb{R})$$
+            </div>
+            <ul class="space-y-1.5 text-xs sm:text-sm">
+              <li>• Partie réelle : $\text{Re}(z) = a$</li>
+              <li>• Partie imaginaire : $\text{Im}(z) = b$ (c'est un <strong>réel</strong> !)</li>
+              <li class="pt-1 text-indigo-700 font-semibold">• $z \in \mathbb{R} \iff \text{Im}(z) = 0$</li>
+              <li class="text-indigo-700 font-semibold">• $z \in i\mathbb{R} \text{ (imaginaire pur)} \iff \text{Re}(z) = 0$</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="egalite operations addition produit multiplication soustraction">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">3</span>
+              Égalité et Opérations
+            </h3>
+            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full font-medium">Calcul</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2">
+            <p>Soient $z = a + ib$ et $z' = c + id$ :</p>
+            <div class="text-xs space-y-2">
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-200">
+                <strong>Égalité :</strong> $z = z' \iff (a = c \text{ et } b = d)$
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-200">
+                <strong>Somme :</strong> $z + z' = (a+c) + i(b+d)$
+              </div>
+              <div class="p-2 rounded-lg bg-slate-50 border border-slate-200">
+                <strong>Produit :</strong> $z \cdot z' = (ac - bd) + i(ad + bc)$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="puissances de i modulo 4 cycle periode">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">4</span>
+              Puissances de $i$
+            </h3>
+            <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">Périodicité 4</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-3">
+            <p>Les puissances de $i$ sont périodiques de <strong>période 4</strong> :</p>
+            <div class="grid grid-cols-4 gap-1.5 text-center text-xs font-mono font-bold">
+              <div class="p-2 bg-indigo-50 rounded-lg border border-indigo-100">i⁰ = 1</div>
+              <div class="p-2 bg-indigo-50 rounded-lg border border-indigo-100">i¹ = i</div>
+              <div class="p-2 bg-indigo-50 rounded-lg border border-indigo-100">i² = -1</div>
+              <div class="p-2 bg-indigo-50 rounded-lg border border-indigo-100">i³ = -i</div>
+            </div>
+            <p class="text-xs text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-200">
+              💡 <strong>Méthode :</strong> Pour calculer $i^n$, on effectue la division euclidienne de $n$ par 4 : $n = 4k + r \implies i^n = i^r$.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 5 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="conjugue z barre proprietes re im z">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">5</span>
+              Conjugué d'un complexe
+            </h3>
+            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">Essentiel</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2">
+            <p>Si $z = a + ib$, son conjugué est $\bar{z} = a - ib$.</p>
+            <div class="text-xs space-y-1.5 font-medium">
+              <div class="flex justify-between bg-slate-50 p-2 rounded-lg border border-slate-200">
+                <span>$z + \bar{z} = 2\,\text{Re}(z)$</span>
+                <span>$z - \bar{z} = 2i\,\text{Im}(z)$</span>
+              </div>
+              <div class="p-2 bg-indigo-50 text-indigo-900 rounded-lg border border-indigo-100 text-center font-semibold">
+                $z \cdot \bar{z} = a^2 + b^2 = |z|^2$
+              </div>
+              <ul class="list-disc list-inside text-xs text-slate-600 space-y-1">
+                <li>$z \in \mathbb{R} \iff z = \bar{z}$</li>
+                <li>$z \in i\mathbb{R} \iff z = -\bar{z}$</li>
+                <li>$\overline{z + z'} = \bar{z} + \bar{z}' \quad \text{et} \quad \overline{z \cdot z'} = \bar{z} \cdot \bar{z}'$</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="quotient division fractions inverse denominateur conjugue">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">6</span>
+              Quotient de deux complexes
+            </h3>
+            <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full font-medium">Technique</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2.5">
+            <p>Pour éliminer $i$ au dénominateur, on multiplie par le <strong>conjugué</strong> :</p>
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center">
+              $$\frac{1}{z} = \frac{\bar{z}}{|z|^2} = \frac{a - ib}{a^2 + b^2}$$
+            </div>
+            <p class="text-xs text-slate-500">
+              Pour $\frac{a+ib}{c+id}$, multiplier numérateur et dénominateur par $(c - id)$ afin d'obtenir un dénominateur réel $(c^2 + d^2)$.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 7 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="module distance valeur absolue pythagore norme">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">7</span>
+              Module d'un complexe
+            </h3>
+            <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-medium">Métrique</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2.5">
+            <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-center font-medium text-indigo-900">
+              $$|z| = \sqrt{a^2 + b^2} = \sqrt{z\bar{z}}$$
+            </div>
+            <ul class="text-xs space-y-1 text-slate-700">
+              <li>• $|z \cdot z'| = |z| \cdot |z'|$</li>
+              <li>• $\left|\frac{z}{z'}\right| = \frac{|z|}{|z'|} \quad (z' \neq 0)$</li>
+              <li>• $|z^n| = |z|^n$</li>
+              <li>• <strong>Interprétation :</strong> $|z| = OM$ (distance de l'origine au point $M(z)$).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Section 8 & 9 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="argument angle forme trigonometrique cosinus sinus theta">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">8 & 9</span>
+              Argument & Forme Trigo
+            </h3>
+            <span class="text-xs bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded-full font-medium">Géométrie</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2">
+            <p>Pour $z \neq 0$, tout complexe s'écrit sous forme trigonométrique :</p>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-center">
+              $$z = r(\cos\theta + i\sin\theta)$$
+            </div>
+            <p class="text-xs text-slate-600">avec $r = |z|$ et $\theta \equiv \arg(z)\,[2\pi]$ tel que :</p>
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono text-center">
+              <div class="p-1.5 bg-slate-100 rounded">$\cos\theta = \frac{a}{|z|}$</div>
+              <div class="p-1.5 bg-slate-100 rounded">$\sin\theta = \frac{b}{|z|}$</div>
+            </div>
+            <p class="text-xs text-slate-500 pt-1">
+              $\arg(zz') = \arg(z) + \arg(z') \ [2\pi]$ et $\arg\left(\frac{z}{z'}\right) = \arg(z) - \arg(z') \ [2\pi]$
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 10 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="forme exponentielle euler exponentielle complexe e^(itheta)">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">10</span>
+              Forme exponentielle (Euler)
+            </h3>
+            <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">Euler</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2">
+            <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-center text-indigo-900">
+              $$e^{i\theta} = \cos\theta + i\sin\theta$$
+              $$z = r\,e^{i\theta} \quad (r = |z| > 0)$$
+            </div>
+            <div class="text-xs space-y-1">
+              <div>• Produit : $r\,e^{i\theta} \cdot r'\,e^{i\theta'} = rr'\,e^{i(\theta+\theta')}$</div>
+              <div>• Quotient : $\frac{r\,e^{i\theta}}{r'\,e^{i\theta'}} = \frac{r}{r'}\,e^{i(\theta-\theta')}$</div>
+              <div>• Conjugué : $\overline{r\,e^{i\theta}} = r\,e^{-i\theta}$</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 11 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="moivre formule puissances trigonometrie angle multiplie">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">11</span>
+              Formule de Moivre
+            </h3>
+            <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">Bac Récurrent</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-3">
+            <p>Pour tout entier relatif $n \in \mathbb{Z}$ :</p>
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-slate-900 font-medium">
+              $$(\cos\theta + i\sin\theta)^n = \cos(n\theta) + i\sin(n\theta)$$
+            </div>
+            <p class="text-xs text-slate-600">
+              Sous forme exponentielle : $(r\,e^{i\theta})^n = r^n\,e^{in\theta}$. Idéal pour calculer les puissances élevées $(1+i\sqrt{3})^{2026}$.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 12 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="racines n-iemes polygone regulier unite omega">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">12</span>
+              Racines $n$-ièmes
+            </h3>
+            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">Théorème</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2">
+            <p>Les solutions de $z^n = a$ où $a = \rho e^{i\varphi} \neq 0$ sont les $n$ nombres distincts :</p>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-center text-xs">
+              $$z_k = \sqrt[n]{\rho}\;\exp\left[i\left(\frac{\varphi + 2k\pi}{n}\right)\right]$$
+              <span class="text-slate-500">avec $k \in \{0, 1, 2, \dots, n-1\}$</span>
+            </div>
+            <p class="text-xs text-slate-500">
+              Géométriquement, les images forment les sommets d'un polygone régulier à $n$ côtés inscrit dans un cercle de rayon $\sqrt[n]{\rho}$.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 13 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="racines carrees delta discriminant systeme algebrique">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">13</span>
+              Racines carrées d'un complexe
+            </h3>
+            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium">Méthode Bac</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2">
+            <p>Pour résoudre $\delta^2 = u + iv$ avec $\delta = x + iy$ :</p>
+            <div class="p-2.5 bg-emerald-50/60 border border-emerald-200 rounded-xl font-mono text-xs space-y-1">
+              <div>1) $x^2 - y^2 = u$ &nbsp;(Partie réelle)</div>
+              <div>2) $x^2 + y^2 = \sqrt{u^2 + v^2}$ &nbsp;(Module)</div>
+              <div>3) $2xy = v$ &nbsp;(Signe du produit)</div>
+            </div>
+            <p class="text-xs text-slate-500">
+              En additionnant (1) et (2), on tire $x^2$, puis $y^2$. Le signe de $v$ fixe le signe relatif de $x$ et $y$.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 14 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden" data-keywords="equations degre 2 second degre coefficients complexes delta vete">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">14</span>
+              Équations du 2nd degré
+            </h3>
+            <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-medium">Clé Bac</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 space-y-2.5">
+            <p>Pour $az^2 + bz + c = 0$ ($a \neq 0$) :</p>
+            <p class="text-xs">On calcule $\Delta = b^2 - 4ac$, puis une racine carrée $\delta$ de $\Delta$ ($\delta^2 = \Delta$) :</p>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-center text-xs font-semibold text-slate-800">
+              $$z_1 = \frac{-b - \delta}{2a}, \quad z_2 = \frac{-b + \delta}{2a}$$
+            </div>
+            <p class="text-xs text-slate-500">
+              <strong>Relations de Viète :</strong> $z_1 + z_2 = -\frac{b}{a}$ et $z_1 \cdot z_2 = \frac{c}{a}$.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 15 & 16 -->
+        <div class="course-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden md:col-span-2 lg:col-span-2" data-keywords="representation geometrique affixe vecteur distance angle lieux classiques mediatrice cercle">
+          <div class="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">15 & 16</span>
+              Interprétation & Lieux Géométriques Classiques
+            </h3>
+            <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">Géométrie Bac</span>
+          </div>
+          <div class="p-5 text-sm text-slate-600 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <h4 class="font-semibold text-xs text-slate-900 uppercase tracking-wide">Distances & Angles orientés</h4>
+              <ul class="text-xs space-y-1.5 text-slate-700">
+                <li>• Affixe de $\vec{AB}$ : $z_B - z_A$</li>
+                <li>• Distance $AB = |z_B - z_A|$</li>
+                <li>• $(\vec{u}, \vec{AB}) \equiv \arg(z_B - z_A) \, [2\pi]$</li>
+                <li>• $(\vec{CA}, \vec{CB}) \equiv \arg\left(\frac{z_B - z_C}{z_A - z_C}\right) \, [2\pi]$</li>
+              </ul>
+            </div>
+            <div class="space-y-2">
+              <h4 class="font-semibold text-xs text-slate-900 uppercase tracking-wide">Lieux caractéristiques</h4>
+              <ul class="text-xs space-y-2">
+                <li class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                  <strong>$|z - z_A| = R$ :</strong> Cercle $\mathscr{C}(A, R)$
+                </li>
+                <li class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                  <strong>$|z - z_A| = |z - z_B|$ :</strong> Médiatrice du segment $[AB]$
+                </li>
+                <li class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                  <strong>$\frac{z - z_A}{z - z_B} \in \mathbb{R}^*$ :</strong> Droite $(AB) \setminus \{B\}$
+                </li>
+                <li class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                  <strong>$\frac{z - z_A}{z - z_B} \in i\mathbb{R}^*$ :</strong> Cercle de diamètre $[AB] \setminus \{A, B\}$
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 17 & 18 -->
+        <div class="course-card bg-white rounded-2xl border border-indigo-200 shadow-sm hover:shadow-md transition overflow-hidden md:col-span-3 lg:col-span-3 bg-gradient-to-br from-indigo-50/40 via-white to-purple-50/30" data-keywords="reflexes bac memoire formulaire astuces simplifier">
+          <div class="p-4 border-b border-indigo-100 flex items-center justify-between">
+            <h3 class="font-bold text-indigo-950 text-base flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-mono">17 & 18</span>
+              Méthodes Rapides Bac & Formulaire Essentiel
+            </h3>
+            <span class="text-xs bg-indigo-600 text-white px-2.5 py-0.5 rounded-full font-medium">À retenir par cœur</span>
+          </div>
+          <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-700">
+            <div class="space-y-2">
+              <h4 class="font-bold text-xs uppercase tracking-wide text-indigo-900 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Réflexes Bac
+              </h4>
+              <ul class="text-xs space-y-1.5 text-slate-600">
+                <li>• <strong>Montrer que $z \in \mathbb{R}$ :</strong> prouver que $\bar{z} = z$ ou que $\text{Im}(z) = 0$.</li>
+                <li>• <strong>Montrer que $z \in i\mathbb{R}$ :</strong> prouver que $\bar{z} = -z$ ou que $\text{Re}(z) = 0$.</li>
+                <li>• <strong>Calculer $z^n$ :</strong> passer systématiquement par la forme exponentielle $r^n e^{in\theta}$.</li>
+                <li>• <strong>Triangle rectangle / isocèle :</strong> calculer le rapport $\frac{z_C - z_A}{z_B - z_A}$. Si égal à $\pm i$, le triangle est isocèle et rectangle en $A$.</li>
+              </ul>
+            </div>
+            <div class="space-y-2">
+              <h4 class="font-bold text-xs uppercase tracking-wide text-indigo-900 flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Formules Fondamentales
+              </h4>
+              <ul class="text-xs space-y-1 font-mono text-slate-800">
+                <li>• $i^2 = -1, \quad i^3 = -i, \quad i^4 = 1$</li>
+                <li>• $|z|^2 = z\bar{z} = a^2 + b^2$</li>
+                <li>• $e^{i\theta} + e^{-i\theta} = 2\cos\theta$</li>
+                <li>• $e^{i\theta} - e^{-i\theta} = 2i\sin\theta$</li>
+                <li>• $e^{i\pi} = -1, \quad e^{i\frac{\pi}{2}} = i$</li>
+              </ul>
+            </div>
+            <div class="p-4 bg-indigo-900 text-white rounded-2xl flex flex-col justify-between">
+              <div>
+                <span class="text-xs uppercase font-bold tracking-wider text-indigo-300">Règle d'or du Prof. Grichi</span>
+                <p class="text-xs mt-2 leading-relaxed text-indigo-100">
+                  "La maîtrise des nombres complexes repose sur <strong>trois réflexes</strong> : choisir la bonne forme (algébrique ou trigonométrique), utiliser le conjugué pour les quotients et interpréter géométriquement le module et l'argument."
+                </p>
+              </div>
+              <div class="pt-3 text-[11px] text-indigo-300 border-t border-indigo-800 mt-2">
+                4ème Sciences Expérimentales
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: PLAN D'ARGAND-GAUSS INTERACTIF -->
+    <!-- ================================================================= -->
+    <section id="tab-labo" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Laboratoire Interactif : Plan Complexe</h2>
+            <p class="text-xs sm:text-sm text-slate-500">Cliquez ou glissez sur le plan orthonormé $(O; \vec{u}, \vec{v})$ pour explorer le point $M(z)$.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="resetLabPoint(2, 2)" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition">
+              $z = 2 + 2i$
+            </button>
+            <button onclick="resetLabPoint(0, 3)" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition">
+              $z = 3i$
+            </button>
+            <button onclick="resetLabPoint(-2, 2*Math.sqrt(3))" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold transition">
+              $z = -2 + 2i\sqrt{3}$
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Canvas Container -->
+          <div class="lg:col-span-8 bg-slate-900 rounded-2xl p-2 relative shadow-inner overflow-hidden flex flex-col items-center">
+            <div class="w-full flex items-center justify-between px-3 py-1 text-slate-400 text-xs">
+              <span>Repère orthonormé direct $(O; \vec{u}, \vec{v})$</span>
+              <span class="font-mono text-indigo-300">Échelle : 1 unité = 40px</span>
+            </div>
+            <div class="relative w-full aspect-square max-h-[480px]">
+              <canvas id="complexCanvas" class="w-full h-full cursor-crosshair rounded-xl"></canvas>
+            </div>
+            <div class="w-full flex items-center justify-between px-3 py-2 text-[11px] text-slate-400">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span> Point $M(z)$</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span> Conjugué $M'(\bar{z})$</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Opposé $M''(-z)$</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Analysis Panel -->
+          <div class="lg:col-span-4 space-y-4">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500">Coordonnées Manuelles</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Partie réelle $a$</label>
+                  <input type="number" id="inputA" step="0.5" value="2" oninput="manualPointUpdate()"
+                    class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-sm font-mono font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Partie imaginaire $b$</label>
+                  <input type="number" id="inputB" step="0.5" value="2" oninput="manualPointUpdate()"
+                    class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-sm font-mono font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Properties Card -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-indigo-700">Caractéristiques de $z$</h3>
+              
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="text-slate-500">Forme algébrique</span>
+                  <span id="dispAlgebrique" class="font-bold font-mono text-slate-900 text-sm">2 + 2i</span>
+                </div>
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="text-slate-500">Module $|z| = OM$</span>
+                  <span id="dispModule" class="font-bold font-mono text-indigo-700 text-sm">2.828 (√8)</span>
+                </div>
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="text-slate-500">Argument $\theta = \arg(z)$</span>
+                  <span id="dispArgument" class="font-bold font-mono text-purple-700 text-sm">π/4 (45°)</span>
+                </div>
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="text-slate-500">Forme exponentielle</span>
+                  <span id="dispExpo" class="font-bold font-mono text-emerald-700 text-sm">√8 e^{iπ/4}</span>
+                </div>
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span class="text-slate-500">Conjugué $\bar{z}$</span>
+                  <span id="dispConjugue" class="font-bold font-mono text-pink-600 text-sm">2 - 2i</span>
+                </div>
+              </div>
+
+              <!-- Nature of z -->
+              <div id="dispNature" class="p-2.5 rounded-xl text-center font-semibold text-xs bg-indigo-50 text-indigo-800">
+                Complexe standard
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: RÉSOLVEUR AZ² + BZ + C = 0 AVEC ÉTAPES DÉTAILLÉES -->
+    <!-- ================================================================= -->
+    <section id="tab-solveur" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold mb-2">
+            Méthode du Discrimant Complexe
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Résolveur d'Équation : $az^2 + bz + c = 0$</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-1">
+            Résolvez toute équation du second degré à coefficients complexes ou réels, avec calcul de $\Delta$, extraction algébrique des racines carrées $\delta$, et racines $z_1, z_2$.
+          </p>
+        </div>
+
+        <!-- Input Formula -->
+        <div class="mt-6 p-4 sm:p-6 bg-slate-50 rounded-2xl border border-slate-200">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <!-- Coefficient a -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-700 uppercase">Coefficient $a \neq 0$</label>
+              <div class="flex items-center gap-1">
+                <input type="number" id="coeff_a_re" value="1" placeholder="Re" class="w-1/2 p-2 rounded-lg border border-slate-300 font-mono text-sm">
+                <span class="text-slate-400 text-xs">+</span>
+                <input type="number" id="coeff_a_im" value="0" placeholder="Im" class="w-1/2 p-2 rounded-lg border border-slate-300 font-mono text-sm">
+                <span class="text-slate-500 font-mono font-bold text-xs">$i$</span>
+              </div>
+            </div>
+
+            <!-- Coefficient b -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-700 uppercase">Coefficient $b$</label>
+              <div class="flex items-center gap-1">
+                <input type="number" id="coeff_b_re" value="-2" placeholder="Re" class="w-1/2 p-2 rounded-lg border border-slate-300 font-mono text-sm">
+                <span class="text-slate-400 text-xs">+</span>
+                <input type="number" id="coeff_b_im" value="0" placeholder="Im" class="w-1/2 p-2 rounded-lg border border-slate-300 font-mono text-sm">
+                <span class="text-slate-500 font-mono font-bold text-xs">$i$</span>
+              </div>
+            </div>
+
+            <!-- Coefficient c -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-700 uppercase">Coefficient $c$</label>
+              <div class="flex items-center gap-1">
+                <input type="number" id="coeff_c_re" value="2" placeholder="Re" class="w-1/2 p-2 rounded-lg border border-slate-300 font-mono text-sm">
+                <span class="text-slate-400 text-xs">+</span>
+                <input type="number" id="coeff_c_im" value="0" placeholder="Im" class="w-1/2 p-2 rounded-lg border border-slate-300 font-mono text-sm">
+                <span class="text-slate-500 font-mono font-bold text-xs">$i$</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action and Presets -->
+          <div class="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200">
+            <div class="flex flex-wrap items-center gap-1.5 text-xs">
+              <span class="text-slate-500 font-medium">Exemples Bac :</span>
+              <button onclick="setEqPreset(1,0, -2,0, 2,0)" class="px-2.5 py-1 rounded-md bg-white border border-slate-200 hover:bg-slate-100 font-mono">$z^2-2z+2=0$</button>
+              <button onclick="setEqPreset(1,0, -3,-1, 4,3)" class="px-2.5 py-1 rounded-md bg-white border border-slate-200 hover:bg-slate-100 font-mono">$z^2-(3+i)z+4+3i=0$</button>
+              <button onclick="setEqPreset(1,0, 0,-2, -1,0)" class="px-2.5 py-1 rounded-md bg-white border border-slate-200 hover:bg-slate-100 font-mono">$z^2-2iz-1=0$</button>
+            </div>
+            <button onclick="solveQuadratic()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-200 transition">
+              Calculer la Résolution Pas-à-Pas
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Steps Container -->
+        <div id="solverResults" class="mt-6 space-y-4">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: LIEUX GÉOMÉTRIQUES INTERACTIFS -->
+    <!-- ================================================================= -->
+    <section id="tab-lieux" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 text-violet-700 text-xs font-semibold mb-2">
+            Interprétation Géométrique
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Catalogue Interactif des Lieux Géométriques</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-1">
+            Sélectionnez une relation pour comprendre comment l'ensemble des points $M(z)$ est identifié et tracé.
+          </p>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <button onclick="setLocusMode('circle')" id="btn-loc-circle" class="locus-btn p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50/40 text-left transition">
+            <span class="block font-bold text-indigo-900 text-sm">1. Cercle $\mathscr{C}(A, R)$</span>
+            <span class="block text-xs font-mono text-indigo-700 mt-1">$|z - z_A| = R$</span>
+          </button>
+          <button onclick="setLocusMode('bisector')" id="btn-loc-bisector" class="locus-btn p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition">
+            <span class="block font-bold text-slate-800 text-sm">2. Médiatrice de $[AB]$</span>
+            <span class="block text-xs font-mono text-slate-500 mt-1">$|z - z_A| = |z - z_B|$</span>
+          </button>
+          <button onclick="setLocusMode('orthocircle')" id="btn-loc-orthocircle" class="locus-btn p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition">
+            <span class="block font-bold text-slate-800 text-sm">3. Cercle de diamètre $[AB]$</span>
+            <span class="block text-xs font-mono text-slate-500 mt-1">$\frac{z - z_A}{z - z_B} \in i\mathbb{R}^*$</span>
+          </button>
+        </div>
+
+        <!-- Dynamic Locus Details -->
+        <div id="locusExplanation" class="mt-6 p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="mt-4 bg-slate-900 rounded-2xl p-4 flex flex-col items-center">
+          <div class="w-full flex items-center justify-between text-slate-400 text-xs mb-2">
+            <span>Visualisation du Lieu</span>
+            <span id="locusEquationLabel" class="font-mono text-indigo-300">|z - (1 + i)| = 2</span>
+          </div>
+          <div class="relative w-full max-w-lg aspect-square">
+            <canvas id="locusCanvas" class="w-full h-full rounded-xl bg-slate-950"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 5: QUIZ D'ENTRAÎNEMENT BAC & AUTO-ÉVALUATION -->
+    <!-- ================================================================= -->
+    <section id="tab-quiz" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-semibold mb-2">
+              Auto-évaluation Bac
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Quiz & QCM Spécial Bac 4ème Sciences</h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-1">
+              Testez vos compétences sur les puissances de $i$, le module, l'argument et les résolutions.
+            </p>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200 self-start">
+            <div class="text-right">
+              <span class="block text-[11px] uppercase font-bold text-slate-400">Score</span>
+              <span id="quizScoreDisplay" class="font-mono font-extrabold text-lg text-indigo-600">0 / 6</span>
+            </div>
+            <button onclick="resetQuiz()" class="p-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 transition" title="Recommencer le quiz">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Questions List -->
+        <div id="quizContainer" class="mt-6 space-y-6">
+          <!-- Dynamically loaded with rich math -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mt-auto bg-white border-t border-slate-200 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800">Mathématiques 4ème SC. EXP</span>
+        <span>•</span>
+        <span>D'après le document du <strong>Prof. Grichi Borhen</strong></span>
+      </div>
+      <div class="text-slate-400">
+        Préparation Bac Sciences Expérimentales & Mathématiques
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Global State
+    let currentTab = 'cours';
+    let currentLabPoint = { a: 2, b: 2 };
+    let locusMode = 'circle';
+    let quizScore = 0;
+    const answeredQuestions = new Set();
+
+    // Utility: Toast message (replaces alert)
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      currentTab = tabId;
+      const tabs = ['cours', 'labo', 'solveur', 'lieux', 'quiz'];
+      tabs.forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        const navBtn = document.getElementById(`nav-${t}`);
+        const mobBtn = document.getElementById(`mob-${t}`);
+        
+        if (t === tabId) {
+          sec.classList.remove('hidden');
+          if (navBtn) {
+            navBtn.className = "nav-btn px-4 py-2 rounded-lg text-indigo-600 bg-white shadow-sm transition font-semibold";
+          }
+          if (mobBtn) {
+            mobBtn.className = "whitespace-nowrap px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold";
+          }
+        } else {
+          sec.classList.add('hidden');
+          if (navBtn) {
+            navBtn.className = "nav-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition";
+          }
+          if (mobBtn) {
+            mobBtn.className = "whitespace-nowrap px-3 py-1.5 rounded-lg bg-white text-slate-700 border border-slate-200";
+          }
+        }
+      });
+
+      // Canvas trigger redraw
+      if (tabId === 'labo') {
+        setTimeout(initLabCanvas, 50);
+      } else if (tabId === 'lieux') {
+        setTimeout(initLocusCanvas, 50);
+      } else if (tabId === 'solveur') {
+        solveQuadratic();
+      }
+
+      // Re-trigger math render
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
+
+    // Search and filter for course cards
+    function filterCards() {
+      const q = document.getElementById('courseSearch').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.course-card');
+      cards.forEach(c => {
+        const text = (c.innerText + ' ' + (c.getAttribute('data-keywords') || '')).toLowerCase();
+        if (text.includes(q)) {
+          c.classList.remove('hidden');
+        } else {
+          c.classList.add('hidden');
+        }
+      });
+    }
+
+    function expandAll(expand) {
+      const cards = document.querySelectorAll('.course-card');
+      cards.forEach(c => {
+        if (expand) c.classList.remove('hidden');
+      });
+      document.getElementById('courseSearch').value = '';
+    }
+
+    let canvas, ctx;
+    const SCALE = 36; // 36px per unit
+
+    function initLabCanvas() {
+      canvas = document.getElementById('complexCanvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+
+      // Set physical canvas size from container
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      drawLabScene();
+      attachCanvasEvents();
+    }
+
+    function drawLabScene() {
+      if (!canvas || !ctx) return;
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw Grid
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = cx % SCALE; x < w; x += SCALE) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = cy % SCALE; y < h; y += SCALE) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Draw Axes
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1.5;
+      // X axis
+      ctx.beginPath();
+      ctx.moveTo(0, cy);
+      ctx.lineTo(w, cy);
+      ctx.stroke();
+      // Y axis
+      ctx.beginPath();
+      ctx.moveTo(cx, 0);
+      ctx.lineTo(cx, h);
+      ctx.stroke();
+
+      // Unit circle
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.25)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(cx, cy, SCALE, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      const ptX = cx + currentLabPoint.a * SCALE;
+      const ptY = cy - currentLabPoint.b * SCALE;
+
+      // Draw circle of radius |z|
+      const mod = Math.hypot(currentLabPoint.a, currentLabPoint.b);
+      ctx.strokeStyle = 'rgba(129, 140, 248, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(cx, cy, mod * SCALE, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Vector OM
+      ctx.strokeStyle = '#818cf8';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(ptX, ptY);
+      ctx.stroke();
+
+      // Dotted lines to axes
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(ptX, cy);
+      ctx.lineTo(ptX, ptY);
+      ctx.lineTo(cx, ptY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Point M (z)
+      ctx.fillStyle = '#6366f1';
+      ctx.beginPath();
+      ctx.arc(ptX, ptY, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText(`M (z)`, ptX + 10, ptY - 10);
+
+      // Conjugate point M' (a, -b)
+      const cPtY = cy + currentLabPoint.b * SCALE;
+      ctx.fillStyle = '#f472b6';
+      ctx.beginPath();
+      ctx.arc(ptX, cPtY, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#f472b6';
+      ctx.font = '11px Inter';
+      ctx.fillText(`M' (z̄)`, ptX + 8, cPtY + 12);
+
+      // Opposite point M'' (-a, -b)
+      const opPtX = cx - currentLabPoint.a * SCALE;
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(opPtX, cPtY, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = '11px Inter';
+      ctx.fillText(`M'' (-z)`, opPtX - 35, cPtY + 12);
+
+      // Argument arc
+      if (mod > 0.05) {
+        let ang = Math.atan2(-currentLabPoint.b, currentLabPoint.a);
+        ctx.strokeStyle = '#c084fc';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 24, 0, ang, ang > 0);
+        ctx.stroke();
+      }
+
+      updateLabCalculations();
+    }
+
+    function updateLabCalculations() {
+      const a = currentLabPoint.a;
+      const b = currentLabPoint.b;
+      const mod = Math.hypot(a, b);
+      let argRad = Math.atan2(b, a); // in [-pi, pi]
+      let argDeg = (argRad * 180 / Math.PI);
+
+      // Pretty sign for b
+      let signB = b >= 0 ? '+' : '-';
+      let absB = Math.abs(b);
+      let algStr = `${a.toFixed(2)} ${signB} ${absB.toFixed(2)}i`;
+      if (b === 0) algStr = `${a.toFixed(2)}`;
+      if (a === 0 && b !== 0) algStr = `${b.toFixed(2)}i`;
+
+      document.getElementById('dispAlgebrique').textContent = algStr;
+      document.getElementById('dispModule').textContent = `${mod.toFixed(3)}`;
+
+      // Argument display in terms of pi if close
+      let piRatio = argRad / Math.PI;
+      let argStr = `${argDeg.toFixed(1)}° (${piRatio.toFixed(2)}π rad)`;
+      document.getElementById('dispArgument').textContent = argStr;
+
+      let conjSign = (-b) >= 0 ? '+' : '-';
+      document.getElementById('dispConjugue').textContent = `${a.toFixed(2)} ${conjSign} ${Math.abs(b).toFixed(2)}i`;
+
+      document.getElementById('dispExpo').textContent = `${mod.toFixed(2)} · e^{i (${piRatio.toFixed(2)}π)}`;
+
+      const natureEl = document.getElementById('dispNature');
+      if (Math.abs(b) < 0.01) {
+        natureEl.textContent = "z est un nombre Réel (Im(z) = 0)";
+        natureEl.className = "p-2.5 rounded-xl text-center font-semibold text-xs bg-emerald-50 text-emerald-800 border border-emerald-200";
+      } else if (Math.abs(a) < 0.01) {
+        natureEl.textContent = "z est Imaginaire Pur (Re(z) = 0)";
+        natureEl.className = "p-2.5 rounded-xl text-center font-semibold text-xs bg-purple-50 text-purple-800 border border-purple-200";
+      } else if (Math.abs(mod - 1) < 0.02) {
+        natureEl.textContent = "z appartient au cercle trigonométrique (|z| = 1)";
+        natureEl.className = "p-2.5 rounded-xl text-center font-semibold text-xs bg-amber-50 text-amber-800 border border-amber-200";
+      } else {
+        natureEl.textContent = "Nombre Complexe quelconque";
+        natureEl.className = "p-2.5 rounded-xl text-center font-semibold text-xs bg-slate-100 text-slate-700";
+      }
+    }
+
+    let isDragging = false;
+    function attachCanvasEvents() {
+      if (!canvas) return;
+
+      const updateFromPointer = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const mouseX = clientX - rect.left;
+        const mouseY = clientY - rect.top;
+
+        currentLabPoint.a = Math.round(((mouseX - cx) / SCALE) * 10) / 10;
+        currentLabPoint.b = Math.round(((cy - mouseY) / SCALE) * 10) / 10;
+
+        document.getElementById('inputA').value = currentLabPoint.a;
+        document.getElementById('inputB').value = currentLabPoint.b;
+        drawLabScene();
+      };
+
+      canvas.onmousedown = (e) => { isDragging = true; updateFromPointer(e); };
+      window.onmousemove = (e) => { if (isDragging) updateFromPointer(e); };
+      window.onmouseup = () => { isDragging = false; };
+
+      canvas.ontouchstart = (e) => { isDragging = true; updateFromPointer(e); };
+      canvas.ontouchmove = (e) => { if (isDragging) { e.preventDefault(); updateFromPointer(e); } };
+      canvas.ontouchend = () => { isDragging = false; };
+    }
+
+    function resetLabPoint(a, b) {
+      currentLabPoint.a = a;
+      currentLabPoint.b = b;
+      document.getElementById('inputA').value = a;
+      document.getElementById('inputB').value = b;
+      drawLabScene();
+      showToast(`Point défini: z = ${a} + ${b}i`);
+    }
+
+    function manualPointUpdate() {
+      const a = parseFloat(document.getElementById('inputA').value) || 0;
+      const b = parseFloat(document.getElementById('inputB').value) || 0;
+      currentLabPoint.a = a;
+      currentLabPoint.b = b;
+      drawLabScene();
+    }
+
+    function setEqPreset(a_re, a_im, b_re, b_im, c_re, c_im) {
+      document.getElementById('coeff_a_re').value = a_re;
+      document.getElementById('coeff_a_im').value = a_im;
+      document.getElementById('coeff_b_re').value = b_re;
+      document.getElementById('coeff_b_im').value = b_im;
+      document.getElementById('coeff_c_re').value = c_re;
+      document.getElementById('coeff_c_im').value = c_im;
+      solveQuadratic();
+    }
+
+    // Complex Arithmetic Helpers
+    function cAdd(z1, z2) { return { re: z1.re + z2.re, im: z1.im + z2.im }; }
+    function cSub(z1, z2) { return { re: z1.re - z2.re, im: z1.im - z2.im }; }
+    function cMul(z1, z2) {
+      return {
+        re: z1.re * z2.re - z1.im * z2.im,
+        im: z1.re * z2.im + z1.im * z2.re
+      };
+    }
+    function cDiv(z1, z2) {
+      const denom = z2.re * z2.re + z2.im * z2.im;
+      return {
+        re: (z1.re * z2.re + z1.im * z2.im) / denom,
+        im: (z1.im * z2.re - z1.re * z2.im) / denom
+      };
+    }
+    function cFormat(z) {
+      const r = Math.round(z.re * 1000) / 1000;
+      const i = Math.round(z.im * 1000) / 1000;
+      if (Math.abs(i) < 0.001) return `${r}`;
+      if (Math.abs(r) < 0.001) return `${i}i`;
+      const sign = i >= 0 ? '+' : '-';
+      return `${r} ${sign} ${Math.abs(i)}i`;
+    }
+
+    function solveQuadratic() {
+      const a = {
+        re: parseFloat(document.getElementById('coeff_a_re').value) || 0,
+        im: parseFloat(document.getElementById('coeff_a_im').value) || 0
+      };
+      const b = {
+        re: parseFloat(document.getElementById('coeff_b_re').value) || 0,
+        im: parseFloat(document.getElementById('coeff_b_im').value) || 0
+      };
+      const c = {
+        re: parseFloat(document.getElementById('coeff_c_re').value) || 0,
+        im: parseFloat(document.getElementById('coeff_c_im').value) || 0
+      };
+
+      const resultsDiv = document.getElementById('solverResults');
+
+      if (Math.abs(a.re) < 0.0001 && Math.abs(a.im) < 0.0001) {
+        resultsDiv.innerHTML = `<div class="p-4 bg-rose-50 text-rose-700 rounded-xl border border-rose-200 text-sm">
+          Erreur : le coefficient $a$ ne peut pas être nul ($a \\neq 0$).
+        </div>`;
+        return;
+      }
+
+      // 1. Calcul de Delta = b^2 - 4ac
+      const b2 = cMul(b, b);
+      const four_a = { re: 4 * a.re, im: 4 * a.im };
+      const four_ac = cMul(four_a, c);
+      const delta = cSub(b2, four_ac);
+
+      // 2. Recherche d'une racine carrée delta_root = x + iy
+      // x^2 - y^2 = delta.re
+      // x^2 + y^2 = |delta|
+      // 2xy = delta.im
+      const modDelta = Math.hypot(delta.re, delta.im);
+      const x2 = (modDelta + delta.re) / 2;
+      const y2 = (modDelta - delta.re) / 2;
+      const x = Math.sqrt(Math.max(0, x2));
+      let y = Math.sqrt(Math.max(0, y2));
+      if (delta.im < 0) y = -y;
+
+      const delta_root = { re: x, im: y };
+
+      // 3. Solutions z1 = (-b - delta_root) / (2a) et z2 = (-b + delta_root) / (2a)
+      const minus_b = { re: -b.re, im: -b.im };
+      const two_a = { re: 2 * a.re, im: 2 * a.im };
+
+      const num1 = cSub(minus_b, delta_root);
+      const num2 = cAdd(minus_b, delta_root);
+
+      const z1 = cDiv(num1, two_a);
+      const z2 = cDiv(num2, two_a);
+
+      resultsDiv.innerHTML = `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 shadow-sm">
+          <div class="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-xs">✓</span>
+            Étapes de Résolution Détaillée
+          </div>
+
+          <!-- Étape 1 -->
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
+            <strong class="text-slate-800 text-sm block">1. Calcul du Discriminant $\\Delta = b^2 - 4ac$</strong>
+            <p class="text-slate-600 font-mono">b² = (${cFormat(b)})² = ${cFormat(b2)}</p>
+            <p class="text-slate-600 font-mono">4ac = ${cFormat(four_ac)}</p>
+            <p class="text-indigo-800 font-bold font-mono text-sm pt-1">\\Delta = ${cFormat(delta)} &nbsp; (|\\Delta| = ${modDelta.toFixed(3)})</p>
+          </div>
+
+          <!-- Étape 2 -->
+          <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1.5">
+            <strong class="text-slate-800 text-sm block">2. Détermination d'une racine carrée $\\delta = x + iy$ de $\\Delta$</strong>
+            <p class="text-slate-600">On résout le système :</p>
+            <div class="bg-white p-2.5 rounded-lg border border-slate-200 font-mono text-[11px] text-slate-700 space-y-0.5">
+              <div>• x² - y² = Re(Δ) = ${delta.re.toFixed(3)}</div>
+              <div>• x² + y² = |Δ| = ${modDelta.toFixed(3)}</div>
+              <div>• 2xy a le signe de Im(Δ) (${delta.im >= 0 ? '+' : '-'})</div>
+            </div>
+            <p class="text-slate-700 font-semibold pt-1">
+              D'où : $\\delta = ${cFormat(delta_root)}$ &nbsp;(et son opposé $-\\delta = ${cFormat({re: -delta_root.re, im: -delta_root.im})}$)
+            </p>
+          </div>
+
+          <!-- Étape 3 -->
+          <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs space-y-2">
+            <strong class="text-emerald-950 text-sm block">3. Solutions de l'Équation dans $\\mathbb{C}$</strong>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="p-3 bg-white rounded-lg border border-emerald-300">
+                <span class="text-slate-500 font-mono text-[11px] block">z₁ = (-b - δ) / (2a)</span>
+                <span class="font-bold font-mono text-emerald-800 text-base block mt-1">z₁ = ${cFormat(z1)}</span>
+                <span class="text-[11px] text-slate-500">|z₁| = ${Math.hypot(z1.re, z1.im).toFixed(3)}</span>
+              </div>
+              <div class="p-3 bg-white rounded-lg border border-emerald-300">
+                <span class="text-slate-500 font-mono text-[11px] block">z₂ = (-b + δ) / (2a)</span>
+                <span class="font-bold font-mono text-emerald-800 text-base block mt-1">z₂ = ${cFormat(z2)}</span>
+                <span class="text-[11px] text-slate-500">|z₂| = ${Math.hypot(z2.re, z2.im).toFixed(3)}</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-emerald-800 pt-1">
+              Vérification (Viète) : $z_1 + z_2 = ${cFormat(cAdd(z1, z2))}$ ; $z_1 \\cdot z_2 = ${cFormat(cMul(z1, z2))}$
+            </div>
+          </div>
+        </div>
+      `;
+
+      renderMathInElement(resultsDiv, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
+
+    let locusCanvas, locusCtx;
+
+    function setLocusMode(mode) {
+      locusMode = mode;
+      ['circle', 'bisector', 'orthocircle'].forEach(m => {
+        const btn = document.getElementById(`btn-loc-${m}`);
+        if (m === mode) {
+          btn.className = "locus-btn p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50/40 text-left transition";
+        } else {
+          btn.className = "locus-btn p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition";
+        }
+      });
+      initLocusCanvas();
+    }
+
+    function initLocusCanvas() {
+      locusCanvas = document.getElementById('locusCanvas');
+      if (!locusCanvas) return;
+      locusCtx = locusCanvas.getContext('2d');
+
+      const rect = locusCanvas.getBoundingClientRect();
+      locusCanvas.width = rect.width * window.devicePixelRatio;
+      locusCanvas.height = rect.height * window.devicePixelRatio;
+      locusCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      drawLocusScene();
+    }
+
+    function drawLocusScene() {
+      if (!locusCanvas || !locusCtx) return;
+      const w = locusCanvas.getBoundingClientRect().width;
+      const h = locusCanvas.getBoundingClientRect().height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const sc = 32;
+
+      locusCtx.clearRect(0, 0, w, h);
+
+      // Grid
+      locusCtx.strokeStyle = '#1e293b';
+      locusCtx.lineWidth = 1;
+      for (let x = cx % sc; x < w; x += sc) {
+        locusCtx.beginPath(); locusCtx.moveTo(x, 0); locusCtx.lineTo(x, h); locusCtx.stroke();
+      }
+      for (let y = cy % sc; y < h; y += sc) {
+        locusCtx.beginPath(); locusCtx.moveTo(0, y); locusCtx.lineTo(w, y); locusCtx.stroke();
+      }
+
+      // Axes
+      locusCtx.strokeStyle = '#475569';
+      locusCtx.lineWidth = 1.5;
+      locusCtx.beginPath(); locusCtx.moveTo(0, cy); locusCtx.lineTo(w, cy); locusCtx.stroke();
+      locusCtx.beginPath(); locusCtx.moveTo(cx, 0); locusCtx.lineTo(cx, h); locusCtx.stroke();
+
+      const explanationDiv = document.getElementById('locusExplanation');
+      const labelEq = document.getElementById('locusEquationLabel');
+
+      if (locusMode === 'circle') {
+        labelEq.textContent = "|z - (1 + i)| = 2.5";
+        const centerA = { x: cx + 1 * sc, y: cy - 1 * sc };
+        const radius = 2.5 * sc;
+
+        // Draw locus: circle
+        locusCtx.strokeStyle = '#818cf8';
+        locusCtx.lineWidth = 3;
+        locusCtx.beginPath();
+        locusCtx.arc(centerA.x, centerA.y, radius, 0, Math.PI * 2);
+        locusCtx.stroke();
+
+        // Center A
+        locusCtx.fillStyle = '#f43f5e';
+        locusCtx.beginPath(); locusCtx.arc(centerA.x, centerA.y, 6, 0, Math.PI * 2); locusCtx.fill();
+        locusCtx.fillStyle = '#ffffff';
+        locusCtx.font = '12px Inter';
+        locusCtx.fillText("A (1+i)", centerA.x + 8, centerA.y - 8);
+
+        explanationDiv.innerHTML = `
+          <div class="text-sm text-slate-700 space-y-2">
+            <h4 class="font-bold text-indigo-900">Propriété : Cercle de centre $A$ et de rayon $R$</h4>
+            <p>L'égalité $|z - z_A| = R$ équivaut à la distance $AM = R$.</p>
+            <p class="text-xs text-slate-600 bg-white p-3 rounded-xl border border-slate-200">
+              💡 <strong>Astuce Bac :</strong> Si l'équation s'écrit $|iz - 2| = 3$, mettez $i$ en facteur : $|i(z - \frac{2}{i})| = |i||z + 2i| = |z - (-2i)| = 3$. Le centre a donc pour affixe $z_A = -2i$ et le rayon vaut 3.
+            </p>
+          </div>
+        `;
+      } else if (locusMode === 'bisector') {
+        labelEq.textContent = "|z - (-2 + i)| = |z - (2 + 3i)|";
+        const ptA = { x: cx - 2 * sc, y: cy - 1 * sc };
+        const ptB = { x: cx + 2 * sc, y: cy - 3 * sc };
+
+        // Segment [AB]
+        locusCtx.strokeStyle = '#64748b';
+        locusCtx.lineWidth = 1.5;
+        locusCtx.setLineDash([4, 4]);
+        locusCtx.beginPath(); locusCtx.moveTo(ptA.x, ptA.y); locusCtx.lineTo(ptB.x, ptB.y); locusCtx.stroke();
+        locusCtx.setLineDash([]);
+
+        // Points A and B
+        locusCtx.fillStyle = '#38bdf8';
+        locusCtx.beginPath(); locusCtx.arc(ptA.x, ptA.y, 6, 0, Math.PI * 2); locusCtx.fill();
+        locusCtx.fillStyle = '#ffffff'; locusCtx.fillText("A (-2+i)", ptA.x - 20, ptA.y + 20);
+
+        locusCtx.beginPath(); locusCtx.arc(ptB.x, ptB.y, 6, 0, Math.PI * 2); locusCtx.fill();
+        locusCtx.fillText("B (2+3i)", ptB.x + 10, ptB.y - 10);
+
+        // Médiatrice (perpendicular through midpoint)
+        const midX = (ptA.x + ptB.x) / 2;
+        const midY = (ptA.y + ptB.y) / 2;
+        const dx = ptB.x - ptA.x;
+        const dy = ptB.y - ptA.y;
+
+        locusCtx.strokeStyle = '#a855f7';
+        locusCtx.lineWidth = 3;
+        locusCtx.beginPath();
+        locusCtx.moveTo(midX - dy * 2, midY + dx * 2);
+        locusCtx.lineTo(midX + dy * 2, midY - dx * 2);
+        locusCtx.stroke();
+
+        explanationDiv.innerHTML = `
+          <div class="text-sm text-slate-700 space-y-2">
+            <h4 class="font-bold text-purple-900">Propriété : Médiatrice du segment $[AB]$</h4>
+            <p>L'égalité $|z - z_A| = |z - z_B|$ équivaut à la relation géométrique $AM = BM$.</p>
+            <p class="text-xs text-slate-600 bg-white p-3 rounded-xl border border-slate-200">
+              💡 Le point $M$ est équidistant des points $A$ et $B$. L'ensemble des points $M$ est la <strong>médiatrice</strong> du segment $[AB]$.
+            </p>
+          </div>
+        `;
+      } else if (locusMode === 'orthocircle') {
+        labelEq.textContent = "(z - zA)/(z - zB) ∈ iℝ*";
+        const ptA = { x: cx - 2.5 * sc, y: cy };
+        const ptB = { x: cx + 2.5 * sc, y: cy };
+        const midX = cx;
+        const rad = 2.5 * sc;
+
+        // Circle of diameter [AB]
+        locusCtx.strokeStyle = '#10b981';
+        locusCtx.lineWidth = 3;
+        locusCtx.beginPath();
+        locusCtx.arc(midX, cy, rad, 0, Math.PI * 2);
+        locusCtx.stroke();
+
+        // Points A and B (hollow to signify excluded)
+        locusCtx.fillStyle = '#ef4444';
+        locusCtx.beginPath(); locusCtx.arc(ptA.x, ptA.y, 5, 0, Math.PI * 2); locusCtx.fill();
+        locusCtx.fillText("A", ptA.x - 15, cy - 10);
+
+        locusCtx.beginPath(); locusCtx.arc(ptB.x, ptB.y, 5, 0, Math.PI * 2); locusCtx.fill();
+        locusCtx.fillText("B", ptB.x + 10, cy - 10);
+
+        explanationDiv.innerHTML = `
+          <div class="text-sm text-slate-700 space-y-2">
+            <h4 class="font-bold text-emerald-900">Propriété : Cercle de diamètre $[AB]$ privé de $A$ et $B$</h4>
+            <p>$\\frac{z - z_A}{z - z_B} \\in i\\mathbb{R}^* \\iff (\\vec{MB}, \\vec{MA}) \\equiv \\frac{\\pi}{2} \\ [\\pi]$</p>
+            <p class="text-xs text-slate-600 bg-white p-3 rounded-xl border border-slate-200">
+              💡 Les vecteurs $\\vec{MA}$ et $\\vec{MB}$ sont orthogonaux. Par le théorème du triangle rectangle inscrit, le point $M$ décrit le <strong>cercle de diamètre $[AB]$</strong> privé des points $A$ et $B$.
+            </p>
+          </div>
+        `;
+      }
+
+      renderMathInElement(explanationDiv, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
+
+    const quizData = [
+      {
+        question: "Quelle est la valeur simplifiée de $i^{2026}$ ?",
+        options: [
+          { text: "$1$", correct: false },
+          { text: "$-1$", correct: true },
+          { text: "$i$", correct: false },
+          { text: "$-i$", correct: false }
+        ],
+        explanation: "On divise 2026 par 4 : $2026 = 4 \\times 506 + 2$. Donc le reste est 2, d'où $i^{2026} = i^2 = -1$."
+      },
+      {
+        question: "Soit $z = 1 + i\\sqrt{3}$. Quelle est sa forme exponentielle exacte ?",
+        options: [
+          { text: "$2e^{i\\frac{\\pi}{6}}$", correct: false },
+          { text: "$2e^{i\\frac{\\pi}{3}}$", correct: true },
+          { text: "$\\sqrt{3}e^{i\\frac{\\pi}{3}}$", correct: false },
+          { text: "$4e^{i\\frac{\\pi}{3}}$", correct: false }
+        ],
+        explanation: "Le module est $|z| = \\sqrt{1^2 + (\\sqrt{3})^2} = \\sqrt{4} = 2$. On a $\\cos\\theta = 1/2$ et $\\sin\\theta = \\sqrt{3}/2$, donc $\\theta = \\frac{\\pi}{3}$. Ainsi $z = 2e^{i\\pi/3}$."
+      },
+      {
+        question: "Si $z = -3i$, quel est son argument principal $\\arg(z)$ ?",
+        options: [
+          { text: "$-\\frac{\\pi}{2} \\ [2\\pi]$", correct: true },
+          { text: "$\\frac{\\pi}{2} \\ [2\\pi]$", correct: false },
+          { text: "$\\pi \\ [2\\pi]$", correct: false },
+          { text: "$0 \\ [2\\pi]$", correct: false }
+        ],
+        explanation: "Le point image $M(0, -3)$ est situé sur le demi-axe imaginaire négatif. L'angle orienté avec l'axe réel est donc $-\\frac{\\pi}{2}$."
+      },
+      {
+        question: "Combien de solutions distinctes l'équation $z^5 = -32$ admet-elle dans $\\mathbb{C}$ ?",
+        options: [
+          { text: "1 solution réelle", correct: false },
+          { text: "2 solutions", correct: false },
+          { text: "5 solutions distinctes", correct: true },
+          { text: "Une infinité", correct: false }
+        ],
+        explanation: "Tout nombre complexe non nul admet exactement $n$ racines $n$-ièmes distinctes dans $\\mathbb{C}$. Ici $n=5$, donc il y a exactement 5 solutions formant un pentagone régulier."
+      },
+      {
+        question: "L'ensemble des points $M(z)$ vérifiant $|z - 3 + 2i| = 5$ est :",
+        options: [
+          { text: "Une droite passant par $(3, -2)$", correct: false },
+          { text: "Le cercle de centre $\\Omega(3, -2)$ et de rayon 5", correct: true },
+          { text: "Le cercle de centre $\\Omega(-3, 2)$ et de rayon 5", correct: false },
+          { text: "La médiatrice d'un segment", correct: false }
+        ],
+        explanation: "On écrit $|z - (3 - 2i)| = 5$. C'est la distance $\\Omega M = 5$ où l'affixe du centre est $z_\\Omega = 3 - 2i$, soit les coordonnées $(3, -2)$."
+      },
+      {
+        question: "Si $\\frac{z_C - z_A}{z_B - z_A} = i$, quelle est la nature du triangle $ABC$ ?",
+        options: [
+          { text: "Équilatéral", correct: false },
+          { text: "Rectangle et isocèle en $A$", correct: true },
+          { text: "Rectangle en $B$", correct: false },
+          { text: "Isocèle en $C$", correct: false }
+        ],
+        explanation: "Le module vaut $|i| = 1 \\implies AC/AB = 1 \\implies AC = AB$. L'argument vaut $\\arg(i) = \\frac{\\pi}{2} \\implies (\\vec{AB}, \\vec{AC}) = \\frac{\\pi}{2}$. Le triangle est donc isocèle et rectangle en $A$."
+      }
+    ];
+
+    function renderQuiz() {
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = '';
+
+      quizData.forEach((q, idx) => {
+        const qCard = document.createElement('div');
+        qCard.className = "p-5 rounded-2xl border border-slate-200 bg-white space-y-3 transition";
+        qCard.id = `question-card-${idx}`;
+
+        let optsHtml = '';
+        q.options.forEach((opt, optIdx) => {
+          optsHtml += `
+            <button onclick="handleAnswer(${idx}, ${optIdx})" id="opt-${idx}-${optIdx}"
+              class="w-full text-left p-3 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 text-xs sm:text-sm font-medium transition flex items-center justify-between group">
+              <span>${opt.text}</span>
+              <span class="w-5 h-5 rounded-full border border-slate-300 group-hover:border-indigo-500 flex items-center justify-center text-[10px] text-transparent group-hover:text-indigo-500">●</span>
+            </button>
+          `;
+        });
+
+        qCard.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <h4 class="font-bold text-slate-900 text-sm sm:text-base">
+              <span class="text-indigo-600 font-mono mr-1">Q${idx + 1}.</span> ${q.question}
+            </h4>
+            <span id="badge-${idx}" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">En attente</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            ${optsHtml}
+          </div>
+          <div id="explanation-${idx}" class="hidden p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 mt-2">
+            <strong>Explication :</strong> ${q.explanation}
+          </div>
+        `;
+
+        container.appendChild(qCard);
+      });
+
+      renderMathInElement(container, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
+
+    function handleAnswer(qIdx, optIdx) {
+      if (answeredQuestions.has(qIdx)) return;
+      answeredQuestions.add(qIdx);
+
+      const q = quizData[qIdx];
+      const isCorrect = q.options[optIdx].correct;
+      const card = document.getElementById(`question-card-${qIdx}`);
+      const badge = document.getElementById(`badge-${qIdx}`);
+      const explanation = document.getElementById(`explanation-${qIdx}`);
+
+      // Highlight selected and correct options
+      q.options.forEach((opt, idx) => {
+        const btn = document.getElementById(`opt-${qIdx}-${idx}`);
+        btn.disabled = true;
+        btn.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50/30');
+
+        if (opt.correct) {
+          btn.className = "w-full text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 text-xs sm:text-sm font-bold flex items-center justify-between";
+        } else if (idx === optIdx && !isCorrect) {
+          btn.className = "w-full text-left p-3 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-900 text-xs sm:text-sm font-medium flex items-center justify-between";
+        } else {
+          btn.className = "w-full text-left p-3 rounded-xl border border-slate-200 opacity-50 text-xs sm:text-sm font-medium";
+        }
+      });
+
+      if (isCorrect) {
+        quizScore++;
+        badge.textContent = "Correct +1";
+        badge.className = "text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+        card.classList.add('border-emerald-300');
+        showToast("Excellente réponse ! +1 point");
+      } else {
+        badge.textContent = "Incorrect";
+        badge.className = "text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800";
+        card.classList.add('border-rose-300');
+      }
+
+      document.getElementById('quizScoreDisplay').textContent = `${quizScore} / ${quizData.length}`;
+      explanation.classList.remove('hidden');
+
+      renderMathInElement(explanation, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
+
+    function resetQuiz() {
+      quizScore = 0;
+      answeredQuestions.clear();
+      document.getElementById('quizScoreDisplay').textContent = `0 / ${quizData.length}`;
+      renderQuiz();
+      showToast("Quiz réinitialisé");
+    }
+
+    // Window initialization
+    window.addEventListener('load', () => {
+      // 1. Render all math initially
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+
+      // 2. Initialize interactive elements
+      renderQuiz();
+      solveQuadratic();
+
+      // Handle window resize for canvases
+      window.addEventListener('resize', () => {
+        if (currentTab === 'labo') initLabCanvas();
+        if (currentTab === 'lieux') initLocusCanvas();
+      });
+    });
+  </script>
+</body>
+</html>
